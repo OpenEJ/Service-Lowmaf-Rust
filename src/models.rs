@@ -1,13 +1,13 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct LowmafInput {
     pub time: u64,
     pub af_correction_short: f64,
     pub af_correction_learning: f64,
     pub intake_air_temp: u64,
     pub mass_airflow_voltage: f64,
-    pub cl_ol_status: u8
+    pub cl_ol_status: u8,
 }
 
 impl std::fmt::Display for LowmafInput {
@@ -27,7 +27,7 @@ impl std::fmt::Display for LowmafInput {
 pub struct LowmafOutput {
     pub MafVoltage: f64,
     pub Correction: f64,
-    pub Frequency: u64 
+    pub Frequency: u64, 
 }
 
 impl LowmafOutput {
