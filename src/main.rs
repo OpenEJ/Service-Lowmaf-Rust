@@ -16,10 +16,12 @@ async fn analyze(input: web::Json<Vec<models::LowmafInput>>) -> Result<impl Resp
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
+        /*
         let cors = Cors::default()
               .allow_any_origin()
               .allow_any_header()
               .allow_any_method();
+        */
         let json_config = web::JsonConfig::default()
             //.limit(4096)
             .error_handler(|err, _req| {
