@@ -1,7 +1,7 @@
 // Step 2
 // Filter out OL values
 // Filter out IAT valed > threshold
-pub fn calc() {
+pub fn calc() -> u32{
     //TODO
-    0
+    return 0;
 }

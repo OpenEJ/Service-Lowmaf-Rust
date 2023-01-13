@@ -1,6 +1,6 @@
 // Step 4, matches corrections observed with cooresponding mafv entry
 // calculates a mean of corrections observed for each entry
-pub fn calc() {
+pub fn calc() -> u32{
     //TODO
-    0
+    return 0;
 }
