@@ -81,8 +81,8 @@ pub struct Step2Output {
     pub correction: f64,
 }
 impl Step2Output {
-    // build trivial output with correction of 0.0
-    pub fn build_trivial(val: &Step1Output) -> Step2Output {
+    // builds a new output struct, with a calculated overall correction
+    pub fn build(val: &Step1Output) -> Step2Output {
         Step2Output {
             time: val.time,
             af_correction_short: val.af_correction_short,
@@ -91,7 +91,7 @@ impl Step2Output {
             mass_airflow_voltage: val.mass_airflow_voltage,
             cl_ol_status: val.cl_ol_status,
             dmafdt: val.dmafdt,
-            correction: 0.0,
+            correction: val.af_correction_short + val.af_correction_learning,
         }
     }
 }

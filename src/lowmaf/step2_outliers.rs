@@ -5,8 +5,12 @@ use crate::models::{Step1Output, Step2Output};
 // Filter out IAT values > threshold ( FOR NOW DONT WORRY )
 // Calculate Overall correction = af_correction_short + af_correction_learning
 pub fn calc(data: Vec<Step1Output>) -> Vec<Step2Output> {
-    //TODO
-    return vec![Step2Output::build_trivial(&data[0])];
+    let output: Vec<Step2Output> = data.into_iter().filter_map(|x| 
+        if x.cl_ol_status == 8 {
+            Some(Step2Output::build(&x)) // correction is calculated inside the build()
+        } else { None } )
+        .collect();
+    output
 }
 
 #[cfg(test)]
