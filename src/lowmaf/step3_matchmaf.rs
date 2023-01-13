@@ -1,15 +1,44 @@
 use crate::models::{LowmafOutput, Step2Output};
 use crate::models::maf_voltages::{usdm02to07wrx_mafvoltages};
+use std::num;
 
 // Step 4, matches corrections observed with cooresponding mafv entry
 //          match on closest mafvoltage in the table
 // calculates a mean of corrections observed for each entry
 pub fn calc(data: Vec<Step2Output>) -> Vec<LowmafOutput> {
-    let mut output: Vec<LowmafOutput> = vec![];
-    for i in 0..usdm02to07wrx_mafvoltages.len(){
-        output.push(LowmafOutput::build_trivial())
+    let mut output: Vec<LowmafOutput> = usdm02to07wrx_mafvoltages.into_iter().map(
+        |x| LowmafOutput{MafVoltage: x, Correction: 0.0, Frequency: 0}
+    ).collect();
+
+    output
+}
+
+// binary search 
+// given a val and a sorted list of voltages, find a val that is closest to a val in the list 
+// return the index of that value
+pub fn find_nearest_maf(val: f64, voltages: [f64; 48]) -> u32 {
+    //conduct binary search until left and right are next to eachother
+    let mut left = 0;
+    let mut right = voltages.len()-1;
+    while (right - left) > 1 {
+        let middle = (left + right)/2; 
+        if voltages[middle] == val {
+            return middle as u32; 
+        }
+        else if voltages[middle] > val {
+            right = middle; 
+        }
+        else {
+            left = middle; 
+        }
     }
-    return output
+    // we are left with 2 values, lets find which one is closet to val
+    let dist_to_left = (voltages[left] - val).abs();
+    let dist_to_right = (voltages[right] - val).abs();
+    if dist_to_left < dist_to_right {
+        return left as u32;
+    }
+    return right as u32;
 }
 
 #[cfg(test)]
@@ -17,7 +46,24 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_works() {
+    fn find_nearest_maf_works() {
+        let v1: f64 = 1.10;
+        let v2: f64 = 1.17;
+        let v3: f64 = 0.5;
+        let v4: f64 = 5.5;
+        let v5: f64 = -1000.0;
+        let v6: f64 = 1.0;
+
+        assert_eq!(find_nearest_maf(v1, usdm02to07wrx_mafvoltages), 4);
+        assert_eq!(find_nearest_maf(v2, usdm02to07wrx_mafvoltages), 6);
+        assert_eq!(find_nearest_maf(v3, usdm02to07wrx_mafvoltages), 0);
+        assert_eq!(find_nearest_maf(v4, usdm02to07wrx_mafvoltages), 47);
+        assert_eq!(find_nearest_maf(v5, usdm02to07wrx_mafvoltages), 0);
+        assert_eq!(find_nearest_maf(v6, usdm02to07wrx_mafvoltages), 2);
+    }
+
+    #[test]
+    fn calc_works() {
         let test_data: Vec<Step2Output> = vec![
             Step2Output{
                 time: 0,
