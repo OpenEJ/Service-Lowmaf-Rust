@@ -1,4 +1,4 @@
-use crate::models::{LowmafInput, LowmafOutput}; 
+use crate::models::{LowmafInput, LowmafOutput, Step1Output}; 
 mod step1_dmafdt; 
 mod step2_outliers; 
 mod step3_correction; 
@@ -9,7 +9,7 @@ mod step4_matchmaf;
 
 // calls main functions for each step
 pub fn begin(data: Vec<LowmafInput>) -> Vec<LowmafOutput> {
-    let output1 = step1_dmafdt::calc(data);
+    let output1: Vec<Step1Output> = step1_dmafdt::calc(data);
     step2_outliers::calc();
     step3_correction::calc();
     step4_matchmaf::calc();
