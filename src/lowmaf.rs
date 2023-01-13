@@ -7,8 +7,9 @@ mod step3_matchmaf;
 pub fn begin(data: Vec<LowmafInput>) -> Vec<LowmafOutput> {
     let output1: Vec<Step1Output> = step1_dmafdt::calc(data);
     let output2: Vec<Step2Output> = step2_outliers::calc(output1);
-    step3_matchmaf::calc();
+    let output3: Vec<LowmafOutput> = step3_matchmaf::calc(output2);
     
-    let test_output = vec![LowmafOutput::new(0.0, 0.0, 0)];
-    test_output
+    output3
+    //let test_output = vec![LowmafOutput::new(0.0, 0.0, 0)];
+    //test_output
 }
