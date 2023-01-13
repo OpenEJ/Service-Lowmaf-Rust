@@ -9,21 +9,26 @@ pub fn calc(data: Vec<Step2Output>) -> Vec<LowmafOutput> {
     let mut output: Vec<LowmafOutput> = usdm02to07wrx_mafvoltages.into_iter().map(
         |x| LowmafOutput{MafVoltage: x, Correction: 0.0, Frequency: 0}
     ).collect();
-
+    for x in data {
+        let matched_index = find_nearest_maf(x.mass_airflow_voltage, usdm02to07wrx_mafvoltages);
+        output[matched_index].Correction = ((output[matched_index].Correction * output[matched_index].Frequency as f64) + x.correction)/ (output[matched_index].Frequency + 1) as f64;
+        output[matched_index].Correction = format!("{:.2}", output[matched_index].Correction).parse::<f64>().unwrap(); // round to nearest hundreth
+        output[matched_index].Frequency += 1;
+    }
     output
 }
 
 // binary search 
 // given a val and a sorted list of voltages, find a val that is closest to a val in the list 
 // return the index of that value
-pub fn find_nearest_maf(val: f64, voltages: [f64; 48]) -> u32 {
+pub fn find_nearest_maf(val: f64, voltages: [f64; 48]) -> usize {
     //conduct binary search until left and right are next to eachother
     let mut left = 0;
     let mut right = voltages.len()-1;
     while (right - left) > 1 {
         let middle = (left + right)/2; 
         if voltages[middle] == val {
-            return middle as u32; 
+            return middle; 
         }
         else if voltages[middle] > val {
             right = middle; 
@@ -36,9 +41,9 @@ pub fn find_nearest_maf(val: f64, voltages: [f64; 48]) -> u32 {
     let dist_to_left = (voltages[left] - val).abs();
     let dist_to_right = (voltages[right] - val).abs();
     if dist_to_left < dist_to_right {
-        return left as u32;
+        return left;
     }
-    return right as u32;
+    return right;
 }
 
 #[cfg(test)]
