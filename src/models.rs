@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+// --- Main INPUT/OUTPUT ---
+
 #[derive(Deserialize, Serialize, Debug)]
 pub struct LowmafInput {
     pub time: u64,
@@ -62,6 +64,34 @@ impl Step1Output {
             mass_airflow_voltage: val.mass_airflow_voltage,
             cl_ol_status: val.cl_ol_status,
             dmafdt: 0.0,
+        }
+    }
+}
+
+// --- Step 2 ---
+
+pub struct Step2Output {
+    pub time: u64,
+    pub af_correction_short: f64,
+    pub af_correction_learning: f64,
+    pub intake_air_temp: u64,
+    pub mass_airflow_voltage: f64,
+    pub cl_ol_status: u8, 
+    pub dmafdt: f64,
+    pub correction: f64,
+}
+impl Step2Output {
+    // build trivial output with correction of 0.0
+    pub fn build_trivial(val: &Step1Output) -> Step2Output {
+        Step2Output {
+            time: val.time,
+            af_correction_short: val.af_correction_short,
+            af_correction_learning: val.af_correction_learning,
+            intake_air_temp: val.intake_air_temp,
+            mass_airflow_voltage: val.mass_airflow_voltage,
+            cl_ol_status: val.cl_ol_status,
+            dmafdt: val.dmafdt,
+            correction: 0.0,
         }
     }
 }
