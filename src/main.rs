@@ -5,17 +5,23 @@ use serde_json::Result;
 mod models;
 mod lowmaf;
 
-async fn index() -> impl Responder {
-    HttpResponse::Ok().body("lowmaf actix-web server is live!")
+// extract json body and deserialize into LowMafInput struct
+// send Vec<LowMafInput> to begin() function located in lowmaf.rs
+async fn analyze(input: web::Json<Vec<models::LowmafInput>>) -> Result<impl Responder> {
+    let resp = lowmaf::begin(input.into_inner());
+    return serde_json::to_string(&resp);
+    
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
+        /*
         let cors = Cors::default()
               .allow_any_origin()
               .allow_any_header()
               .allow_any_method();
+        */
         let json_config = web::JsonConfig::default()
             //.limit(4096)
             .error_handler(|err, _req| {
@@ -23,18 +29,13 @@ async fn main() -> std::io::Result<()> {
                 error::InternalError::from_response(err, HttpResponse::Conflict().finish())
                     .into()
             });
-        App::new()
-            .wrap(cors)
-            .service(
-                web::resource("/api/analyze/0/")
-                    .app_data(json_config)
-                    //.route(web::post().to(receive_data)),
-            ).service(
-                web::resource("/")
-                    .route(web::get().to(index)),
-            )
+        App::new().service(
+            web::resource("/api/analyze/0/")
+                .app_data(json_config)
+                .route(web::post().to(analyze)),
+        )
     })
-    .bind(("0.0.0.0", 8000))?
+    .bind(("127.0.0.1", 8000))?
     .run()
     .await
 }
