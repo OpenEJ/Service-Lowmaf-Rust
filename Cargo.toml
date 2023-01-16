@@ -1,5 +1,5 @@
 [package]
-name = "Service-Lowmaf"
+name = "service_lowmaf_rust"
 version = "0.1.0"
 edition = "2021"
 
