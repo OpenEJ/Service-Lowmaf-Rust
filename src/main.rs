@@ -36,7 +36,7 @@ async fn main() -> std::io::Result<()> {
                 .app_data(json_config)
                 .route(web::post().to(analyze)),
         ).service(
-            web::resource("/")
+            web::resource("/heartbeat/0/")
                 .route(web::get().to(index))
         )
     })
