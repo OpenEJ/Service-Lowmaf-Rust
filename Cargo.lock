@@ -3,16 +3,6 @@
 version = 3
 
 [[package]]
-name = "Service-Lowmaf"
-version = "0.1.0"
-dependencies = [
- "actix-cors",
- "actix-web",
- "serde",
- "serde_json",
-]
-
-[[package]]
 name = "actix-codec"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -863,6 +853,16 @@ dependencies = [
  "itoa",
  "ryu",
  "serde",
+]
+
+[[package]]
+name = "service_lowmaf_rust"
+version = "0.1.0"
+dependencies = [
+ "actix-cors",
+ "actix-web",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
