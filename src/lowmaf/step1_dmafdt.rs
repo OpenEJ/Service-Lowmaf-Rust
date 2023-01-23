@@ -4,6 +4,10 @@ use crate::models::{LowmafInput, Step1Output};
 // construct dmaf/dt column for each data entry
 // filter out values >.3
 pub fn calc(data: Vec<LowmafInput>) -> Vec<Step1Output>{
+    // check that there is valid data
+    if data.len() == 0 {
+        // TODO return error message
+    }
     // first index is trivial (has dmafdt of 0), since there is no value before it to compare 
     let mut output: Vec<Step1Output> = vec![Step1Output::build_trivial(&data[0])];
     for d in 1..data.len() {
