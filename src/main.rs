@@ -11,9 +11,9 @@ async fn index() -> impl Responder {
 
 // extract json body and deserialize into LowMafInput struct
 // send Vec<LowMafInput> to begin() function located in lowmaf.rs
-async fn analyze(input: web::Json<Vec<models::LowmafInput>>) -> Result<HttpResponse, HttpResponse> {
-    let resp = lowmaf::begin(input.into_inner())?;
-    Ok(HttpResponse::Ok().json(&resp))
+async fn analyze(input: web::Json<Vec<models::LowmafInput>>) -> HttpResponse {
+    let resp = lowmaf::begin(input.into_inner());
+    HttpResponse::Ok().json(&resp)
 }
 
 #[actix_web::main]
