@@ -1,12 +1,12 @@
-use crate::models::{LowmafInput, Step1Output};
+use crate::models::{LowmafInput, Step1Output, BadData};
 
 // step 1
 // construct dmaf/dt column for each data entry
 // filter out values >.3
-pub fn calc(data: Vec<LowmafInput>) -> Vec<Step1Output>{
+pub fn calc(data: Vec<LowmafInput>) -> Result< Vec<Step1Output>, BadData >{
     // check that there is valid data
     if data.len() == 0 {
-        // TODO return error message
+        return Err(BadData { message: "Recieved 0 lines of data, unable to parse" });
     }
     // first index is trivial (has dmafdt of 0), since there is no value before it to compare 
     let mut output: Vec<Step1Output> = vec![Step1Output::build_trivial(&data[0])];
@@ -21,7 +21,7 @@ pub fn calc(data: Vec<LowmafInput>) -> Vec<Step1Output>{
             output.push(new_val);
         }
     }
-    output
+    Ok(output)
 }
 
 // Test Driven Development
