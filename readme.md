@@ -8,7 +8,16 @@ We decided that rather try to optimize our python code, which would be systemica
 Rust gives us vastly higher performance, and still many of the same advantages of python. Moving forward Rust should be the standard for any performance intensive OpenEJ services. We would also like to experiment with concurrency and data analysis libraries such as Polars to further optimize the already ```blazingly fast``` Rust code.
 
 # Architecture 
+We organized this project in a way that allows for adaptability in the future. 
+![File Structure](./images/filestructure.png)
+Following rust best practices, ```main.rs``` is only used for creating the actix web server, and declaring our routes. 
+main.rs currently contains two routes :
+1. ```/api/analyze/0``` which calls the main runner funciton in ```lowmaf.rs```
+2. ```/heartbeat/0/``` which returns a 200 code indicating that the server is live
 
+In ```lowmaf.rs```, the main calculations for the lowmaf data analysis are organized. The main runner function ```begin()``` calls functions for each step of the process, located in the ```./lowmaf/``` directory. 
+
+Finally ```models.rs``` is used to store all of the neccessary structs, and constants used throughout this service
 # Performance
 We ran several tests in prodcution between the pyhton, and rust based lowmaf services.
 The nature of the tests included testing files of multiple sizes, multiple times for each type of service. 
