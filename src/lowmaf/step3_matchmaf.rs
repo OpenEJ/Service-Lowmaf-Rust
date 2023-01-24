@@ -1,6 +1,5 @@
 use crate::models::{LowmafOutput, Step2Output};
 use crate::models::maf_voltages::{usdm02to07wrx_mafvoltages};
-use std::num;
 
 // Step 4, matches corrections observed with cooresponding mafv entry
 //          match on closest mafvoltage in the table
