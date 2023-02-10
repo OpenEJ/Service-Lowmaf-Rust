@@ -24,7 +24,7 @@ mod tests {
                 time: 0,
                 af_correction_short: 0.0,
                 af_correction_learning: 1.0,
-                intake_air_temp: 40,
+                intake_air_temp: -40,
                 mass_airflow_voltage: 3.0,
                 cl_ol_status: 8,
                 dmafdt: 0.15,
